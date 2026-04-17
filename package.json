@@ -1,0 +1,22 @@
+{
+  "name": "soroban-mobile-money",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Blockchain-enabled mobile payment platform on Soroban (Stellar)",
+  "workspaces": [
+    "apps/backend",
+    "apps/mobile",
+    "packages/shared"
+  ],
+  "scripts": {
+    "backend": "npm run dev --workspace=apps/backend",
+    "mobile:android": "npm run android --workspace=apps/mobile",
+    "mobile:ios": "npm run ios --workspace=apps/mobile",
+    "build:shared": "npm run build --workspace=packages/shared",
+    "lint": "npm run lint --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
