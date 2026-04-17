@@ -5,14 +5,17 @@
   "description": "Blockchain-enabled mobile payment platform on Soroban (Stellar)",
   "workspaces": [
     "apps/backend",
+    "apps/frontend",
     "apps/mobile",
     "packages/shared"
   ],
   "scripts": {
     "backend": "npm run dev --workspace=apps/backend",
+    "frontend": "npm run dev --workspace=apps/frontend",
     "mobile:android": "npm run android --workspace=apps/mobile",
     "mobile:ios": "npm run ios --workspace=apps/mobile",
     "build:shared": "npm run build --workspace=packages/shared",
+    "build:frontend": "npm run build --workspace=apps/frontend",
     "lint": "npm run lint --workspaces --if-present",
     "test": "npm run test --workspaces --if-present"
   },

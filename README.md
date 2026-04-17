@@ -11,54 +11,82 @@ Soroban Mobile Money bridges traditional mobile money systems with decentralized
 ```
 soroban-mobile-money/
 ├── apps/
-│   ├── mobile/          # React Native mobile app
-│   └── backend/         # Node.js REST API
-├── contracts/           # Soroban smart contracts (Rust)
+│   ├── frontend/        # React + Vite web dashboard (Tailwind CSS)
+│   ├── backend/         # Node.js REST API (Express + TypeScript)
+│   └── mobile/          # React Native mobile app (iOS & Android)
+├── contracts/
+│   ├── wallet/          # Soroban wallet smart contract (Rust)
+│   └── payment/         # Soroban payment smart contract (Rust)
 ├── packages/
-│   └── shared/          # Shared types, utilities, constants
+│   └── shared/          # Shared TypeScript types, utilities, constants
 └── docs/                # Architecture and API documentation
 ```
 
 ## Tech Stack
 
-- **Frontend**: React Native (iOS & Android)
-- **Backend**: Node.js + Express
-- **Blockchain**: Soroban (Stellar smart contracts in Rust)
-- **Database**: PostgreSQL
-- **Infrastructure**: AWS / GCP
+| Layer | Technology |
+|-------|-----------|
+| Web Frontend | React 18, Vite, Tailwind CSS, Recharts |
+| Mobile App | React Native 0.73 |
+| Backend API | Node.js, Express, TypeScript |
+| Blockchain | Soroban (Stellar smart contracts in Rust) |
+| Database | PostgreSQL |
+| Auth | JWT (phone + password) |
+| State | Zustand |
+
+## Features
+
+- Mobile wallet with Stellar keypair generation
+- P2P money transfers (XLM / USDC)
+- Cross-border transfers with live FX rates
+- Agent cash-in / cash-out network
+- Merchant QR payment portal
+- Transaction history with status tracking
+- Dashboard with charts and analytics
 
 ## Getting Started
 
 ### Prerequisites
 
 - Node.js >= 18
-- Rust + Cargo
+- PostgreSQL
+- Rust + Cargo (for smart contracts)
 - Stellar CLI (`stellar`)
-- React Native environment (Android Studio / Xcode)
 
 ### Install Dependencies
 
 ```bash
-# Install backend dependencies
-cd apps/backend && npm install
-
-# Install mobile dependencies
-cd apps/mobile && npm install
-
-# Build shared package
-cd packages/shared && npm install && npm run build
+npm install
 ```
 
 ### Environment Setup
 
-Copy `.env.example` to `.env` in each app directory and fill in the required values.
+```bash
+cp apps/backend/.env.example apps/backend/.env
+cp apps/frontend/.env.example apps/frontend/.env   # optional
+```
 
-### Run Backend
+Fill in your DB credentials and Stellar keys in `apps/backend/.env`.
+
+### Run Database Migration
 
 ```bash
-cd apps/backend
-npm run dev
+psql -d your_database -f apps/backend/src/db/migrations/001_initial.sql
 ```
+
+### Start Backend
+
+```bash
+cd apps/backend && npm run dev
+```
+
+### Start Web Frontend
+
+```bash
+cd apps/frontend && npm run dev
+```
+
+Open http://localhost:5173
 
 ### Run Mobile App
 
@@ -75,16 +103,36 @@ npx react-native run-ios
 cd contracts
 cargo build --target wasm32-unknown-unknown --release
 stellar contract deploy --wasm target/wasm32-unknown-unknown/release/wallet.wasm
+stellar contract deploy --wasm target/wasm32-unknown-unknown/release/payment.wasm
 ```
+
+## API Endpoints
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST | /api/auth/register | Register user |
+| POST | /api/auth/login | Login |
+| GET | /api/wallet | Get wallet + balances |
+| POST | /api/wallet/create | Create Stellar wallet |
+| GET | /api/transactions | List transactions |
+| POST | /api/transactions/send | P2P transfer |
+| POST | /api/crossborder/send | Cross-border transfer |
+| GET | /api/crossborder/rates | Exchange rates |
+| POST | /api/agents/register | Register as agent |
+| POST | /api/agents/cash-in | Agent cash-in |
+| POST | /api/agents/cash-out | Agent cash-out |
+| POST | /api/merchants/register | Register as merchant |
+
+See [docs/api.md](docs/api.md) for full reference.
 
 ## Implementation Phases
 
-| Phase | Features |
-|-------|----------|
-| 1 | Core Wallet & P2P Payments |
-| 2 | Merchant & Agent Network |
-| 3 | Cross-Border Transfers |
-| 4 | Analytics, Reporting & SDK |
+| Phase | Features | Status |
+|-------|----------|--------|
+| 1 | Core Wallet & P2P Payments | ✅ Scaffolded |
+| 2 | Merchant & Agent Network | ✅ Scaffolded |
+| 3 | Cross-Border Transfers | ✅ Scaffolded |
+| 4 | Analytics, Reporting & SDK | 🔜 Planned |
 
 ## License
 

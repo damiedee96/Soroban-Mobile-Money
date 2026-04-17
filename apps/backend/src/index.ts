@@ -6,6 +6,7 @@ import { walletRouter } from './routes/wallet';
 import { transactionRouter } from './routes/transactions';
 import { agentRouter } from './routes/agents';
 import { merchantRouter } from './routes/merchants';
+import { crossBorderRouter } from './routes/crossborder';
 import { errorHandler } from './middleware/errorHandler';
 import { logger } from './utils/logger';
 
@@ -23,6 +24,7 @@ app.use('/api/wallet', walletRouter);
 app.use('/api/transactions', transactionRouter);
 app.use('/api/agents', agentRouter);
 app.use('/api/merchants', merchantRouter);
+app.use('/api/crossborder', crossBorderRouter);
 
 // Health check
 app.get('/health', (_req, res) => {
